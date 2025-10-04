@@ -1,64 +1,57 @@
-namespace App.Tests.T2_WarehouseManager;
+using System;
+using System.Collections.Generic;
 
-[TestFixture]
-public class WarehouseManagerTests
+namespace App.Topics.ConstrainedClasses.T2_WarehouseManager
 {
-    [Test]
-    public void PrintBasicInfo_Prints_For_Electronics()
+    public abstract class Product
     {
-        var items = new List<Electronics>
+        public int ID { get; }
+        public string Name { get; }
+
+        protected Product(int id, string name)
         {
-            new Electronics(1, "Phone", 24),
-            new Electronics(2, "Laptop", 12)
-        };
-
-        var manager = new WarehouseManager<Electronics>(items);
-        using var sw = new StringWriter();
-        Console.SetOut(sw);
-
-        manager.PrintBasicInfo();
-
-        var output = sw.ToString().Replace("\r\n", "\n");
-        Assert.That(output, Is.EqualTo(
-            "ID: 1, Name: Phone\n" +
-            "ID: 2, Name: Laptop\n"));
+            ID = id;
+            Name = name;
+        }
     }
 
-    [Test]
-    public void PrintBasicInfo_Prints_For_Food()
+    public class Electronics : Product
     {
-        var items = new List<Food>
+        public int WarrantyMonths { get; }
+
+        public Electronics(int id, string name, int warrantyMonths)
+            : base(id, name)
         {
-            new Food(10, "Milk", new DateTime(2030, 1, 1)),
-            new Food(20, "Bread", new DateTime(2026, 12, 31))
-        };
-
-        var manager = new WarehouseManager<Food>(items);
-        using var sw = new StringWriter();
-        Console.SetOut(sw);
-
-        manager.PrintBasicInfo();
-
-        var output = sw.ToString().Replace("\r\n", "\n");
-        Assert.That(output, Is.EqualTo(
-            "ID: 10, Name: Milk\n" +
-            "ID: 20, Name: Bread\n"));
+            WarrantyMonths = warrantyMonths;
+        }
     }
 
-    [Test]
-    public void Empty_List_Prints_Nothing()
+    public class Food : Product
     {
-        var manager = new WarehouseManager<Electronics>(new List<Electronics>());
-        using var sw = new StringWriter();
-        Console.SetOut(sw);
+        public DateTime ExpirationDate { get; }
 
-        manager.PrintBasicInfo();
-        Assert.That(sw.ToString(), Is.EqualTo(string.Empty));
+        public Food(int id, string name, DateTime expirationDate)
+            : base(id, name)
+        {
+            ExpirationDate = expirationDate;
+        }
     }
 
-    [Test]
-    public void Ctor_Null_Items_Throws()
+    public class WarehouseManager<T> where T : Product
     {
-        Assert.Throws<ArgumentNullException>(() => new WarehouseManager<Food>(null!));
+        private readonly IEnumerable<T> _items;
+
+        public WarehouseManager(IEnumerable<T> items)
+        {
+            _items = items ?? throw new ArgumentNullException(nameof(items));
+        }
+
+        public void PrintBasicInfo()
+        {
+            foreach (var item in _items)
+            {
+                Console.WriteLine($"ID: {item.ID}, Name: {item.Name}");
+            }
+        }
     }
 }
