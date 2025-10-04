@@ -18,17 +18,17 @@ namespace App.Topics.ConstrainedClasses.T2_WarehouseManager
 
     public class WarehouseManager<T> where T : Product
     {
-        public IEnumerable<T> Iitems;
+        public IEnumerable<T> _items;
 
         public WarehouseManager(IEnumerable<T> items)
         {
             _ = items ?? throw new ArgumentNullException(nameof(items));
-           Iitems = items;
+            _items = items;
         }
 
         public void PrintBasicInfo()
         {
-            foreach (var item in Iitems)
+            foreach (var item in _items)
             {
                 Console.WriteLine($"ID: {item.ID}, Name: {item.Name}");
             }
