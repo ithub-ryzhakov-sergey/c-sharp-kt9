@@ -1,3 +1,6 @@
+using System;
+using App.Topics.ConstrainedClasses.T2_WarehouseManager;
+  
 namespace App.Tests.T2_WarehouseManager;
 
 [TestFixture]
