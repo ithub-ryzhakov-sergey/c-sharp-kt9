@@ -1,59 +1,62 @@
-using System;
-using System.Collections.Generic;
+using App.T1_CustomDictionary;
 
-namespace App.Topics.Generics.T1_CustomDictionary
+namespace App.Tests.T1_CustomDictionary;
+
+[TestFixture]
+public class DualKeyDictionaryTests
 {
-    public class DualKeyDictionary<TValue>
+    [Test]
+    public void SetAndGet_ByIntKey_Works_For_ReferenceType()
     {
-        private readonly Dictionary<int, TValue> _intDictionary;
-        private readonly Dictionary<string, TValue> _stringDictionary;
+        var dict = new DualKeyDictionary<string>();
+        dict[42] = "answer";
+        Assert.That(dict[42], Is.EqualTo("answer"));
 
-        public DualKeyDictionary()
-        {
-            _intDictionary = new Dictionary<int, TValue>();
-            _stringDictionary = new Dictionary<string, TValue>();
-        }
+        dict[42] = "updated";
+        Assert.That(dict[42], Is.EqualTo("updated"));
+    }
 
-        public TValue this[int id]
-        {
-            get
-            {
-                if (!_intDictionary.TryGetValue(id, out TValue value))
-                {
-                    throw new KeyNotFoundException($"The given key '{id}' was not present in the dictionary.");
-                }
-                return value;
-            }
-            set
-            {
-                _intDictionary[id] = value;
-            }
-        }
+    [Test]
+    public void SetAndGet_ByStringKey_Works_For_ValueType()
+    {
+        var dict = new DualKeyDictionary<int>();
+        dict["count"] = 10;
+        Assert.That(dict["count"], Is.EqualTo(10));
 
-        public TValue this[string key]
-        {
-            get
-            {
-                if (key == null)
-                {
-                    throw new ArgumentNullException(nameof(key), "String key cannot be null.");
-                }
+        dict["count"] = -5;
+        Assert.That(dict["count"], Is.EqualTo(-5));
+    }
 
-                if (!_stringDictionary.TryGetValue(key, out TValue value))
-                {
-                    throw new KeyNotFoundException($"The given key '{key}' was not present in the dictionary.");
-                }
-                return value;
-            }
-            set
-            {
-                if (key == null)
-                {
-                    throw new ArgumentNullException(nameof(key), "String key cannot be null.");
-                }
+    [Test]
+    public void Get_Unknown_Int_Key_Throws()
+    {
+        var dict = new DualKeyDictionary<string>();
+        Assert.Throws<KeyNotFoundException>(() => { var _ = dict[777]; });
+    }
 
-                _stringDictionary[key] = value;
-            }
-        }
+    [Test]
+    public void Get_Unknown_String_Key_Throws()
+    {
+        var dict = new DualKeyDictionary<int>();
+        Assert.Throws<KeyNotFoundException>(() => { var _ = dict["nope"]; });
+    }
+
+    [Test]
+    public void String_Key_Null_Throws_On_Get_And_Set()
+    {
+        var dict = new DualKeyDictionary<string>();
+        Assert.Throws<ArgumentNullException>(() => { var _ = dict[null!]; });
+        Assert.Throws<ArgumentNullException>(() => dict[null!] = "x");
+    }
+
+    [Test]
+    public void Int_And_String_KeySpaces_Are_Independent()
+    {
+        var dict = new DualKeyDictionary<string>();
+        dict[1] = "one";
+        dict["1"] = "string-one";
+
+        Assert.That(dict[1], Is.EqualTo("one"));
+        Assert.That(dict["1"], Is.EqualTo("string-one"));
     }
 }
