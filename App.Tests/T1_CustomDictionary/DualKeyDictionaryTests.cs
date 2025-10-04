@@ -1,4 +1,5 @@
 namespace App.Tests.T1_CustomDictionary;
+using App.T1_CustomDictionary;
 
 [TestFixture]
 public class DualKeyDictionaryTests

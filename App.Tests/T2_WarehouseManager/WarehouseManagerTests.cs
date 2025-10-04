@@ -1,4 +1,5 @@
 namespace App.Tests.T2_WarehouseManager;
+using App.T2_WarehouseManager;
 
 [TestFixture]
 public class WarehouseManagerTests
