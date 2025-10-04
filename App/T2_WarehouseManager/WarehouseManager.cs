@@ -1,37 +1,19 @@
 namespace App.Topics.ConstrainedClasses.T2_WarehouseManager
 {
-    public class Product
+    public class Product(int id, string name)
     {
-        public int ID { get; }
-        public string Name { get; }
-
-        public Product(int id, string name)
-        {
-            ID = id;
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-        }
+        public int ID { get; } = id;
+        public string Name { get; } = name ?? throw new ArgumentNullException(nameof(name));
     }
 
-    public class Electronics : Product
+    public class Electronics(int id, string name, int warrantyMonths) : Product(id, name)
     {
-        public int WarrantyMonths { get; }
-
-        public Electronics(int id, string name, int warrantyMonths)
-            : base(id, name)
-        {
-            WarrantyMonths = warrantyMonths;
-        }
+        public int WarrantyMonths { get; } = warrantyMonths;
     }
 
-    public class Food : Product
+    public class Food(int id, string name, DateTime expirationDate) : Product(id, name)
     {
-        public DateTime ExpirationDate { get; }
-
-        public Food(int id, string name, DateTime expirationDate)
-            : base(id, name)
-        {
-            ExpirationDate = expirationDate;
-        }
+        public DateTime ExpirationDate { get; } = expirationDate;
     }
 
     public class WarehouseManager<T> where T : Product
