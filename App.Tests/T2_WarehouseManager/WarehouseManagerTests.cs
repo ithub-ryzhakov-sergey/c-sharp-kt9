@@ -1,4 +1,4 @@
-namespace App.Tests.T2_WarehouseManager;
+namespace App.Topics.ConstrainedClasses.T2_WarehouseManager;
 
 [TestFixture]
 public class WarehouseManagerTests
