@@ -1,3 +1,4 @@
+
 namespace App.Tests.T2_WarehouseManager;
 
 [TestFixture]
