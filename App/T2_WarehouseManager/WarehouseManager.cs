@@ -36,17 +36,17 @@ namespace App.Topics.ConstrainedClasses.T2_WarehouseManager
 
     public class WarehouseManager<T> where T : Product
     {
-        public IEnumerable<T> _items;
+        public IEnumerable<T> Iitems;
 
         public WarehouseManager(IEnumerable<T> items)
         {
             _ = items ?? throw new ArgumentNullException(nameof(items));
-            _items = items;
+           Iitems = items;
         }
 
         public void PrintBasicInfo()
         {
-            foreach (var item in _items)
+            foreach (var item in Iitems)
             {
                 Console.WriteLine($"ID: {item.ID}, Name: {item.Name}");
             }
